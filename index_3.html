@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ТООРХОН 22 ПЭЙЖ</title>
+<meta property="og:title" content="ТООРХОН 22 ПЭЙЖ">
+<meta property="og:description" content="Онлайн кино каталог — шууд авах боломжтой">
+<meta property="og:image" content="https://naraa333bb-a11y.github.io/Toorhon22new/чөлөөт ярилцлага.jpg">
+<style>
+:root{
+  --bg:#2e2d35;--white:#38363f;--surface:#42404a;--card:#343240;
+  --border:#4a4852;--border2:#5a5865;
+  --text:#f0ede8;--muted:#9b98b0;--hint:#d0cdc8;
+  --purple:#8b5cf6;--purple2:#7c3aed;--purple-light:#3a3448;--purple-mid:#6d4fc4;
+  --pink:#ec4899;--pink-light:#2d1a2e;
+  --green:#10b981;--green-light:#0d2620;--green-mid:#34d399;
+  --gold:#f59e0b;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Times New Roman',Times,serif;}
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.back-btn{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--muted);flex-shrink:0;}
+.back-btn:hover{background:var(--purple-light);color:var(--purple);}
+.topbar-title{font-size:15px;font-weight:500;color:var(--text);flex:1;}
+
+/* HERO */
+.cat-hero{position:relative;width:100%;height:56vw;max-height:380px;min-height:220px;overflow:hidden;background:var(--card);}
+.cat-hero-img{width:100%;height:100%;object-fit:cover;display:block;opacity:.85;}
+.cat-hero-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#1a1228,#0d1a2a);font-size:60px;opacity:.5;}
+.cat-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,14,23,.95) 0%,rgba(15,14,23,.4) 50%,transparent 100%);}
+.cat-hero-text{position:absolute;bottom:0;left:0;right:0;padding:20px 18px 18px;}
+.cat-hero-title{font-family:'Times New Roman',Times,serif;font-size:clamp(52px,13vw,96px);font-weight:900;color:#fff;line-height:1.05;margin-bottom:6px;text-shadow:0 2px 12px rgba(0,0,0,.5);}
+.cat-hero-sub{font-size:13px;color:rgba(255,255,255,.65);}
+
+/* VIP PROMO */
+.vip-promo-wrap{padding:14px 16px 0;}
+.vip-promo-card{background:var(--purple);border:2px solid var(--purple-mid);border-radius:16px;padding:28px 20px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:box-shadow .2s,transform .15s;min-height:130px;}
+.vip-promo-card:hover{box-shadow:0 8px 28px rgba(139,92,246,.35);transform:translateY(-2px);}
+
+/* GRID */
+.cat-grid-wrap{padding:16px;flex:1;}
+.sec-title{font-family:'Times New Roman',Times,serif;font-size:17px;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px;}
+
+/* MOVIE CARD */
+.movie-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;}
+.movie-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(139,92,246,.25);border-color:var(--purple-mid);}
+.poster-wrap{width:100%;aspect-ratio:2/3;position:relative;overflow:hidden;background:var(--purple-light);pointer-events:none;}
+.poster-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.poster-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:linear-gradient(160deg,#1a1228,#0d1a2a);}
+.poster-ph-icon{font-size:28px;opacity:.4;}
+.poster-ph-name{font-size:11px;color:var(--purple);text-align:center;padding:0 8px;line-height:1.4;}
+.b-price{position:absolute;top:8px;right:8px;background:var(--purple);color:#fff;font-size:13px;font-weight:700;padding:4px 11px;border-radius:100px;}
+.card-info{padding:10px 12px;pointer-events:none;}
+.card-name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:8px;line-height:1.3;}
+.card-btn{width:100%;padding:12px;background:var(--purple);border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:700;font-family:'Times New Roman',Times,serif;cursor:pointer;}
+
+/* BUY */
+.buy-scroll{flex:1;overflow-y:auto;}
+.buy-poster{width:100%;overflow:hidden;background:var(--card);}
+.buy-ph{width:100%;height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:linear-gradient(160deg,#1a1228,#0d1a2a);}
+.buy-ph-icon{font-size:48px;opacity:.4;}
+.buy-ph-name{font-size:16px;color:var(--purple);text-align:center;padding:0 20px;}
+.buy-body{padding:20px 16px;}
+.buy-title{font-size:22px;color:#fff;margin-bottom:8px;}
+.buy-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.price-tag{display:inline-block;background:var(--purple);color:#fff;font-size:22px;font-weight:500;padding:8px 18px;border-radius:10px;margin-bottom:20px;}
+
+/* INPUT */
+.inp-label-big{font-size:18px;font-weight:700;color:#fff;margin-bottom:10px;display:block;}
+.inp-wrap{position:relative;margin-bottom:14px;}
+.inp-field{width:100%;padding:13px 130px 13px 15px;background:var(--surface);border:2px solid #ef4444;border-radius:10px;color:var(--text);font-size:15px;font-family:'Times New Roman',Times,serif;outline:none;transition:border-color .3s;}
+.inp-field.valid{border-color:#10b981!important;}
+.inp-field::placeholder{color:var(--hint);}
+.inp-confirm-btn{position:absolute;right:6px;top:50%;transform:translateY(-50%);height:36px;padding:0 10px;min-width:42px;background:transparent;border:none;border-radius:8px;color:rgba(255,255,255,.25);font-size:13px;font-weight:700;font-family:'Times New Roman',Times,serif;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.inp-confirm-active{background:linear-gradient(135deg,var(--purple),var(--pink))!important;color:#fff!important;box-shadow:0 2px 10px rgba(139,92,246,.4);padding:0 14px!important;}
+
+/* UTGA */
+.utga-sec{display:none;margin-top:16px;}
+.utga-sec.on{display:block;}
+.utga-lbl{font-size:11px;font-weight:500;color:var(--green-mid);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.utga-lbl::before{content:'✓';background:var(--green);color:#fff;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
+.utga-inline-row{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.25);border:1.5px solid var(--green-mid);border-radius:10px;padding:11px 14px;margin-bottom:12px;flex-wrap:wrap;}
+.utga-inline-val{flex:1;font-size:15px;font-weight:500;color:#fff;word-break:break-all;line-height:1.4;min-width:0;}
+.utga-inline-copy{flex-shrink:0;height:36px;padding:0 14px;background:linear-gradient(135deg,var(--purple),var(--pink));border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;font-family:'Times New Roman',Times,serif;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.utga-inline-copy.ok{background:var(--green);}
+
+/* BANK */
+.bank-box{background:var(--card);border:2px solid var(--green-mid);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+.bank-hd-big{background:var(--purple-light);padding:13px 16px;border-bottom:1px solid var(--purple-mid);font-size:15px;font-weight:700;color:#fff;}
+.bank-rows{padding:12px 16px;}
+.bank-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;flex-wrap:wrap;gap:6px;}
+.bank-row:last-child{border:none;}
+.bl{color:var(--muted);font-size:12px;}
+.bv.pu{color:var(--purple);font-size:16px;font-weight:700;}
+.inline-copy-btn{display:inline-flex;align-items:center;gap:4px;flex-shrink:0;height:36px;padding:0 14px;background:linear-gradient(135deg,var(--purple),var(--pink));border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;font-family:'Times New Roman',Times,serif;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.inline-copy-btn.ok{opacity:.85;}
+
+.paid-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--green),#059669);border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:500;font-family:'Times New Roman',Times,serif;cursor:pointer;margin-bottom:20px;box-shadow:0 6px 20px rgba(16,185,129,.4);display:block;text-align:center;text-decoration:none;}
+
+/* VIP FULL */
+.vip-full-wrap{flex:1;overflow-y:auto;padding:20px 16px;}
+.vip-full-hero{text-align:center;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.vip-price-box{background:linear-gradient(135deg,var(--purple-light),var(--pink-light));border:1.5px solid var(--purple-mid);border-radius:14px;padding:18px;text-align:center;margin-bottom:16px;}
+.vip-price-big{font-size:36px;color:#fff;margin-bottom:4px;}
+.vip-price-sub{font-size:12px;color:var(--muted);}
+
+/* 18+ BADGE */
+.badge-18{display:inline-flex;align-items:center;justify-content:center;width:74px;height:74px;background:radial-gradient(circle,#ff3b3b,#c0000a);border:3px solid #fff;border-radius:50%;font-size:22px;font-weight:900;color:#fff;font-family:'Times New Roman',Times,serif;letter-spacing:-.5px;box-shadow:0 4px 16px rgba(239,68,68,.7);flex-shrink:0;transform:rotate(-10deg);animation:wobble 2.5s ease-in-out infinite;}
+.badge-18::before{content:'18+';}
+@keyframes wobble{0%,100%{transform:rotate(-10deg) scale(1);}50%{transform:rotate(-10deg) scale(1.1);}}
+</style>
+</head>
+<body>
+
+<!-- КАТАЛОГ -->
+<div class="screen active" id="s-catalog">
+  <div class="cat-hero" id="heroEl">
+    <div class="cat-hero-ph">🎬</div>
+    <div class="cat-hero-overlay"></div>
+    <div class="cat-hero-text">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px;">
+        <h1 class="cat-hero-title" style="margin-bottom:0;">ТООРХОН 22 ПЭЙЖ</h1>
+        <span class="badge-18"></span>
+      </div>
+      <p class="cat-hero-sub">Кино сонгоод шууд авах боломжтой</p>
+    </div>
+  </div>
+
+  <div class="vip-promo-wrap">
+    <div class="vip-promo-card" onclick="go('s-vip')">
+      <div style="width:100%;text-align:center;">
+        <h2 style="font-family:'Times New Roman',Times,serif;font-size:22px;font-weight:900;color:#fff;margin:0 0 6px;">ХААЛТТАЙ ГРУПП ОРОХ</h2>
+        <p style="font-size:20px;font-weight:700;color:#fff;margin:0;">15,100 ₮ / 2 САР</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cat-grid-wrap">
+    <p class="sec-title">Кинонууд</p>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</div>
+
+<!-- ХУДАЛДАН АВАХ -->
+<div class="screen" id="s-buy">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('s-catalog')">&#8592;</button>
+    <span class="topbar-title" id="buyTopTitle"></span>
+  </div>
+  <div class="buy-scroll">
+    <div class="buy-poster" id="buyPosterEl"></div>
+    <div class="buy-body">
+      <h2 class="buy-title" id="buyTitleEl"></h2>
+      <p class="buy-desc" id="buyDescEl"></p>
+      <div class="price-tag" id="buyPriceTag"></div>
+
+      <label class="inp-label-big">ТА ӨӨРИЙН FACEBOOK НЭРЭЭ ОРУУЛНА УУ.</label>
+      <div class="inp-wrap">
+        <input class="inp-field" id="buyName" type="text"
+          placeholder="Жишээ: Bataa Boldkhuyag"
+          oninput="onNameType('buyName','buyConfirm')"
+          onkeydown="if(event.key==='Enter')doConfirm()">
+        <button class="inp-confirm-btn" id="buyConfirm" onclick="doConfirm()">→</button>
+      </div>
+
+      <div class="utga-sec" id="buyUtgaSec">
+        <p class="utga-lbl">Гүйлгээний утга</p>
+        <div class="utga-inline-row">
+          <span class="utga-inline-val" id="buyUtgaVal"></span>
+          <button class="utga-inline-copy" id="buyUtgaBtn"
+            onclick="cpTxt(document.getElementById('buyUtgaVal').textContent,'buyUtgaBtn','buyUtgaTxt','buyUtgaIcon')">
+            <span id="buyUtgaIcon">📋</span> <span id="buyUtgaTxt">Хуулах</span>
+          </button>
+        </div>
+        <div class="bank-box">
+          <div class="bank-hd-big">💳 Дараах дансанд шилжүүлнэ үү — ХААН БАНК</div>
+          <div class="bank-rows">
+            <div class="bank-row">
+              <span class="bl">Дансны дугаар</span>
+              <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span class="bv pu">880005005675358133</span>
+                <button class="inline-copy-btn" id="buyBankBtn"
+                  onclick="cpTxt('880005005675358133','buyBankBtn','buyBankTxt','buyBankIcon')">
+                  <span id="buyBankIcon">📋</span><span id="buyBankTxt">Хуулах</span>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <a class="paid-btn" href="https://m.me/963575403514027" target="_blank">ТӨЛБӨР ТӨЛСӨН БАРИМТАА ИЛГЭЭНЭ ҮҮ.</a>
+      </div>
+
+      <div style="height:1px;background:var(--border);margin:0 0 16px"></div>
+      <div class="vip-promo-card" onclick="go('s-vip')" style="margin-bottom:20px;">
+        <div style="width:100%;text-align:center;">
+          <h2 style="font-family:'Times New Roman',Times,serif;font-size:22px;font-weight:900;color:#fff;margin:0 0 6px;">ХААЛТТАЙ ГРУППТ ОРОХ</h2>
+          <p style="font-size:20px;font-weight:700;color:#fff;margin:0;">15,100 ₮ / 2 САР</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIP -->
+<div class="screen" id="s-vip">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('s-catalog')">&#8592;</button>
+    <span class="topbar-title">Хаалттай групп</span>
+  </div>
+  <div class="vip-full-wrap">
+    <div class="vip-full-hero">
+      <h2 style="font-size:28px;font-weight:900;color:#fff;">ХААЛТТАЙ ГРУППТ ОРОХ</h2>
+    </div>
+    <div class="vip-price-box">
+      <p class="vip-price-big">15,100 ₮</p>
+      <p class="vip-price-sub">2 сарын эрх · Нэг удаагийн төлбөр</p>
+    </div>
+
+    <label class="inp-label-big">ТА ӨӨРИЙН FACEBOOK НЭРЭЭ ОРУУЛНА УУ.</label>
+    <div class="inp-wrap">
+      <input class="inp-field" id="vipName" type="text"
+        placeholder="Жишээ: Bataa Boldkhuyag"
+        oninput="onNameType('vipName','vipConfirm')"
+        onkeydown="if(event.key==='Enter')doVipConfirm()">
+      <button class="inp-confirm-btn" id="vipConfirm" onclick="doVipConfirm()">→</button>
+    </div>
+
+    <div class="utga-sec" id="vipUtgaSec">
+      <p class="utga-lbl">Гүйлгээний утга</p>
+      <div class="utga-inline-row">
+        <span class="utga-inline-val" id="vipUtgaVal"></span>
+        <button class="utga-inline-copy" id="vipUtgaBtn"
+          onclick="cpTxt(document.getElementById('vipUtgaVal').textContent,'vipUtgaBtn','vipUtgaTxt','vipUtgaIcon')">
+          <span id="vipUtgaIcon">📋</span> <span id="vipUtgaTxt">Хуулах</span>
+        </button>
+      </div>
+      <div class="bank-box">
+        <div class="bank-hd-big">💳 Дараах дансанд шилжүүлнэ үү — ХААН БАНК</div>
+        <div class="bank-rows">
+          <div class="bank-row">
+            <span class="bl">Дансны дугаар</span>
+            <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span class="bv pu">880005005675358133</span>
+              <button class="inline-copy-btn" id="vipBankBtn"
+                onclick="cpTxt('880005005675358133','vipBankBtn','vipBankTxt','vipBankIcon')">
+                <span id="vipBankIcon">📋</span><span id="vipBankTxt">Хуулах</span>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <a class="paid-btn" href="https://m.me/963575403514027" target="_blank">ТӨЛБӨР ТӨЛСӨН БАРИМТАА ИЛГЭЭНЭ ҮҮ.</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const IMAGES={
+  1:"чөлөөт ярилцлага.jpg",
+  2:"номын санч.jpg",
+  3:"movie3.jpg",
+  4:"тосгоны охинтой учирсан нь.jpg",
+  5:"хойд ээж.jpg",
+  6:"movie6.jpg",
+  7:"гудамжинд таарсан эмэтэй.jpg",
+  8:"эхнэрийн эмч найз.jpg",
+  9:"гадуурхагдсан эмэгтэй.jpg",
+  10:"босс эмэгтэй.jpg"
+};
+
+const VIDEOS={
+  1:"https://www.youtube.com/embed/CkQh9881rEY",
+  2:"https://www.youtube.com/embed/znRUCdIcryo",
+  3:"https://www.youtube.com/embed/UkA_bxrgONY",
+  4:"https://www.youtube.com/embed/M_AmykiNw4Q",
+  5:"https://www.youtube.com/embed/fr2LnllPjGA",
+  6:"https://www.youtube.com/embed/YaX7-vO8yXE",
+  7:"https://www.youtube.com/embed/Cw5Ok5C8p6I",
+  8:"https://www.youtube.com/embed/LXrlhmRt8dg",
+  9:"https://www.youtube.com/embed/jj2gp2zGAqI",
+  10:"https://www.youtube.com/embed/I0r2JLD9GaY"
+};
+
+const MOVIES=[
+  {id:1,name:"Чөлөөт Ярилцлага",price:"5,100 ₮",desc:"Чөлөөт ярилцлагын аянд хайр, хувь тавилан хоёрлоно."},
+  {id:2,name:"Номын Санч",price:"5,100 ₮",desc:"Номын дунд ургасан хайрын үлгэр."},
+  {id:3,name:"Өндөр Эмэгтэй",price:"5,100 ₮",desc:"Өндөр зорилготой эмэгтэйн амьдрал, хайр дурлалын тухай."},
+  {id:4,name:"Тосгоны Охинтой Учирсан Нь",price:"5,100 ₮",desc:"Тосгонд болсон гэнэтийн уулзалт хувь тавиланг өөрчилнө."},
+  {id:5,name:"Хойд Ээж",price:"5,100 ₮",desc:"Хойд ээжийн хайр, гэр бүлийн утга учрын тухай гүн гүнзгий кино."},
+  {id:6,name:"Эмч Бүсгүй",price:"5,100 ₮",desc:"Эмч бүсгүй ба өвчтөний хоорондох гэнэтийн хайрын тухай."},
+  {id:7,name:"Гудамжинд Таарсан Эмэгтэй",price:"5,100 ₮",desc:"Гудамжинд болсон нэг уулзалт хоёр хүний амьдралыг өөрчилнө."},
+  {id:8,name:"Эхнэрийн Эмч Найз",price:"5,100 ₮",desc:"Найрамдал, итгэл, хайр гурвын хооронд зурагдах нарийн шугам."},
+  {id:9,name:"Гадуурхагдсан Эмэгтэй",price:"5,100 ₮",desc:"Нийгмийн гадуурхалтыг даван туулсан эмэгтэйн хайрын тухай."},
+  {id:10,name:"Босс Эмэгтэй",price:"5,100 ₮",desc:"Хүчирхэг, шийдэмгий эмэгтэй удирдагчийн аялал."},
+];
+
+let movie=null;
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function renderCat(){
+  document.getElementById('catGrid').innerHTML=MOVIES.map(m=>`
+    <div class="movie-card" onclick="openBuy(${m.id})">
+      <div class="poster-wrap">
+        <img src="${IMAGES[m.id]}" alt="${m.name}"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="poster-ph" style="display:none">
+          <span class="poster-ph-icon">🎬</span>
+          <span class="poster-ph-name">${m.name}</span>
+        </div>
+        <span class="b-price">${m.price}</span>
+      </div>
+      <div class="card-info">
+        <p class="card-name">${m.name}</p>
+        <button class="card-btn">Авах</button>
+      </div>
+    </div>`).join('');
+}
+
+function loadHero(){
+  const pick=MOVIES[Math.floor(Math.random()*MOVIES.length)];
+  const img=new Image();
+  img.onload=()=>{
+    document.getElementById('heroEl').innerHTML=
+      `<img class="cat-hero-img" src="${IMAGES[pick.id]}" alt="${pick.name}">
+       <div class="cat-hero-overlay"></div>
+       <div class="cat-hero-text">
+         <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px;">
+           <h1 class="cat-hero-title" style="margin-bottom:0;">ТООРХОН 22 ПЭЙЖ</h1>
+           <span class="badge-18"></span>
+         </div>
+         <p class="cat-hero-sub">Кино сонгоод шууд авах боломжтой</p>
+       </div>`;
+  };
+  img.src=IMAGES[pick.id];
+}
+
+function openBuy(id){
+  movie=MOVIES.find(m=>m.id===id);
+  document.getElementById('buyTopTitle').textContent=movie.name;
+  document.getElementById('buyTitleEl').textContent=movie.name;
+  document.getElementById('buyDescEl').textContent=movie.desc;
+  document.getElementById('buyPriceTag').textContent=movie.price;
+  document.getElementById('buyPosterEl').innerHTML=
+    `<iframe src="${VIDEOS[id]}?rel=0"
+       style="width:100%;height:300px;border:none;display:block;"
+       allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
+       allowfullscreen></iframe>`;
+  document.getElementById('buyName').value='';
+  document.getElementById('buyUtgaSec').classList.remove('on');
+  const btn=document.getElementById('buyConfirm');
+  if(btn){btn.classList.remove('inp-confirm-active');btn.textContent='→';}
+  const inp=document.getElementById('buyName');
+  if(inp)inp.classList.remove('valid');
+  go('s-buy');
+}
+
+function onNameType(inputId,btnId){
+  const v=document.getElementById(inputId).value.trim();
+  const btn=document.getElementById(btnId);
+  const inp=document.getElementById(inputId);
+  const active=v.length>=2;
+  if(btn){btn.classList.toggle('inp-confirm-active',active);btn.textContent=active?'БАТАЛГААЖУУЛАХ':'→';}
+  if(inp)inp.classList.toggle('valid',active);
+}
+
+function doConfirm(){
+  const n=document.getElementById('buyName').value.trim();
+  if(n.length<2)return;
+  document.getElementById('buyUtgaVal').textContent=n+' — '+movie.name;
+  document.getElementById('buyUtgaSec').classList.add('on');
+  document.getElementById('buyUtgaSec').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function doVipConfirm(){
+  const n=document.getElementById('vipName').value.trim();
+  if(n.length<2)return;
+  document.getElementById('vipUtgaVal').textContent=n+' — toorxon';
+  document.getElementById('vipUtgaSec').classList.add('on');
+  document.getElementById('vipUtgaSec').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function cpTxt(text,btnId,txtId,iconId){
+  const label=document.getElementById(txtId)?document.getElementById(txtId).textContent:'Хуулах';
+  const done=()=>{
+    const b=document.getElementById(btnId);if(b)b.classList.add('ok');
+    const t=document.getElementById(txtId);if(t)t.textContent='Хуулагдлаа!';
+    const i=document.getElementById(iconId);if(i)i.textContent='✓';
+    setTimeout(()=>{
+      if(b)b.classList.remove('ok');
+      if(t)t.textContent=label;
+      if(i)i.textContent='📋';
+    },2500);
+  };
+  navigator.clipboard.writeText(text).then(done).catch(()=>{
+    const el=document.createElement('textarea');
+    el.value=text;document.body.appendChild(el);el.select();
+    document.execCommand('copy');document.body.removeChild(el);done();
+  });
+}
+
+renderCat();
+loadHero();
+</script>
+</body>
+</html>
